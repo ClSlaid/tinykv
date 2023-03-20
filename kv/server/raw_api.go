@@ -110,9 +110,10 @@ func (server *Server) RawScan(_ context.Context, req *kvrpcpb.RawScanRequest) (*
 
 	var pairs []*kvrpcpb.KvPair
 	var cnt uint32 = 0
-	item := iter.Item()
 
 	for iter.Valid() && cnt < limit {
+		item := iter.Item()
+
 		pair := new(kvrpcpb.KvPair)
 		pair.Key = item.KeyCopy(nil)
 		val, err := item.ValueCopy(nil)
@@ -124,7 +125,6 @@ func (server *Server) RawScan(_ context.Context, req *kvrpcpb.RawScanRequest) (*
 
 		pairs = append(pairs, pair)
 		iter.Next()
-		item = iter.Item()
 		cnt += 1
 	}
 
